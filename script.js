@@ -1,4 +1,5 @@
-const questions = [
+const questions=[
+
 
 "이 고민이 1주일 이상 계속되었나요?",
 
@@ -17,11 +18,14 @@ const questions = [
 ];
 
 
-let currentQuestion = 0;
+let current=0;
 
-let answers = [];
+let answers=[];
 
-let worry = "";
+let chart=null;
+
+let userWorry="";
+
 
 
 
@@ -30,34 +34,36 @@ let worry = "";
 function startTest(){
 
 
-    worry =
-    document.getElementById(
-        "worryInput"
-    ).value;
+userWorry=
+document
+.getElementById("worry")
+.value;
 
 
-    if(worry.trim()===""){
 
-        alert(
-        "고민을 입력해주세요."
-        );
+if(userWorry.trim()===""){
 
-        return;
+alert("고민을 입력해주세요.");
 
-    }
+return;
 
-
-    document
-    .getElementById("startScreen")
-    .classList.add("d-none");
+}
 
 
-    document
-    .getElementById("questionScreen")
-    .classList.remove("d-none");
+
+document
+.getElementById("start")
+.classList.add("hidden");
 
 
-    showQuestion();
+
+document
+.getElementById("quiz")
+.classList.remove("hidden");
+
+
+
+showQuestion();
 
 }
 
@@ -68,30 +74,37 @@ function startTest(){
 function showQuestion(){
 
 
-    document
-    .getElementById("questionNumber")
-    .innerText =
-    `${currentQuestion+1} / 7`;
-
-
-    document
-    .getElementById("questionText")
-    .innerText =
-    questions[currentQuestion];
+document
+.getElementById("number")
+.innerText=
+`${current+1} / 7`;
 
 
 
-    let progress =
-    ((currentQuestion)/questions.length)*100;
+document
+.getElementById("question")
+.innerText=
+questions[current];
 
 
-    document
-    .getElementById("progressBar")
-    .style.width =
-    progress+"%";
+
+document
+.getElementById("progressBar")
+.style.width=
+`${current/7*100}%`;
+
+
+
+document
+.getElementById("backBtn")
+.style.display=
+current===0?
+"none":
+"block";
 
 
 }
+
 
 
 
@@ -100,23 +113,24 @@ function showQuestion(){
 function answer(value){
 
 
-    answers.push(value);
+answers[current]=value;
 
 
-    currentQuestion++;
+current++;
 
 
-    if(currentQuestion < questions.length){
 
-        showQuestion();
+if(current<questions.length){
 
-    }
+showQuestion();
 
-    else{
+}
 
-        showResult();
+else{
 
-    }
+showResult();
+
+}
 
 
 }
@@ -125,24 +139,45 @@ function answer(value){
 
 
 
-function calculateScore(){
+
+function previousQuestion(){
 
 
-    let yesCount =
-    answers.filter(
-        item=>item===true
-    ).length;
+if(current>0){
 
+current--;
 
-    let importance =
-    Math.round(
-        yesCount / 7 * 14
-    ) + 1;
-
-
-    return importance;
+showQuestion();
 
 }
+
+
+}
+
+
+
+
+
+
+
+function getScore(){
+
+
+let count=
+answers.filter(
+x=>x===true
+).length;
+
+
+
+return Math.round(
+(count/7)*14
+)+1;
+
+
+}
+
+
 
 
 
@@ -151,63 +186,277 @@ function calculateScore(){
 function showResult(){
 
 
-    document
-    .getElementById("questionScreen")
-    .classList.add("d-none");
-
-
-    document
-    .getElementById("resultScreen")
-    .classList.remove("d-none");
+document
+.getElementById("quiz")
+.classList.add("hidden");
 
 
 
-    let score =
-    calculateScore();
+document
+.getElementById("result")
+.classList.remove("hidden");
 
 
 
-    document
-    .getElementById("score")
-    .innerText =
-    `${score} / 15`;
+let score=getScore();
 
 
 
-    let message="";
-
-
-    if(score<=5){
-
-        message =
-        "현재 고민이 큰 영향을 주고 있지는 않아 보입니다. 하지만 계속 신경 쓰인다면 기록하며 관찰해보세요.";
-
-    }
-
-    else if(score<=10){
-
-        message =
-        "고민이 생활에 영향을 주기 시작한 단계입니다. 주변 사람과 이야기하거나 해결 방법을 찾아보세요.";
-
-    }
-
-    else{
-
-
-        message =
-        "고민이 지속되고 일상에 영향을 주고 있습니다. 혼자 해결하려 하기보다 신뢰할 수 있는 사람과 이야기해보세요.";
-
-    }
+document
+.getElementById("score")
+.innerText=
+score;
 
 
 
-    document
-    .getElementById("resultText")
-    .innerText =
-    message;
+document
+.getElementById("savedWorry")
+.innerText=
+userWorry;
+
+
+
+drawGauge(score);
+
+
+
+let level="";
+
+let message="";
+
+
+
+if(score<=5){
+
+level="낮음";
+
+
+message=
+`
+현재 상태는 고민의 영향이 낮은 단계입니다.
+
+현재 고민이 일상에 큰 영향을 주고 있지는 않아 보입니다.
+
+추천 방법
+
+✓ 고민을 글로 정리하기
+✓ 작은 해결 방법부터 시도하기
+✓ 충분한 휴식 가지기
+`;
+
 
 
 }
+
+else if(score<=10){
+
+
+level="보통";
+
+
+message=
+`
+현재 상태는 고민이 생활에 영향을 주기 시작한 단계입니다.
+
+반복적으로 생각하거나 집중하는 데 영향을 줄 수 있습니다.
+
+추천 방법
+
+✓ 고민의 원인 기록하기
+✓ 해결 가능한 부분 찾기
+✓ 주변 사람과 이야기하기
+`;
+
+
+
+}
+
+else{
+
+
+level="높음";
+
+
+message=
+`
+현재 상태는 고민이 생활에 큰 영향을 주고 있는 단계입니다.
+
+오랜 고민으로 감정과 생활 패턴에도 영향을 줄 수 있습니다.
+
+추천 방법
+
+✓ 혼자 계속 고민하지 않기
+✓ 믿을 수 있는 사람과 이야기하기
+✓ 필요하다면 전문가 도움 고려하기
+`;
+
+
+
+}
+
+
+
+document
+.getElementById("level")
+.innerText=
+level;
+
+
+
+document
+.getElementById("message")
+.innerText=
+message;
+
+
+}
+
+
+
+
+
+
+
+
+function drawGauge(score){
+
+
+
+if(chart){
+
+chart.destroy();
+
+}
+
+
+
+let color;
+
+
+
+if(score<=5){
+
+color="#22c55e";
+
+}
+
+else if(score<=10){
+
+color="#f59e0b";
+
+}
+
+else{
+
+color="#ef4444";
+
+}
+
+
+
+
+
+chart=new Chart(
+
+document.getElementById("gauge"),
+
+
+{
+
+type:"doughnut",
+
+
+data:{
+
+
+datasets:[{
+
+
+data:[
+
+score,
+
+15-score
+
+],
+
+
+
+backgroundColor:[
+
+color,
+
+"#e5e7eb"
+
+],
+
+
+borderWidth:0,
+
+
+borderRadius:15
+
+
+}]
+
+
+},
+
+
+
+options:{
+
+
+responsive:true,
+
+
+maintainAspectRatio:false,
+
+
+rotation:-90,
+
+
+circumference:180,
+
+
+cutout:"75%",
+
+
+
+animation:{
+
+
+duration:1500
+
+
+},
+
+
+
+plugins:{
+
+
+legend:{display:false},
+
+
+tooltip:{enabled:false}
+
+
+}
+
+
+}
+
+
+}
+
+);
+
+
+}
+
+
+
 
 
 
@@ -217,46 +466,63 @@ function showResult(){
 function shareResult(){
 
 
-    let score =
-    calculateScore();
+let score=getScore();
+
+
+let url=
+"https://juwonly.github.io/worry-checker/";
 
 
 
-    let text =
-`나의 고민 중요도 결과
-
-${score}/15 단계
-
-고민 중요도 확인기`;
+let text=
+`
+🧠 고민 중요도 결과
 
 
+나의 고민:
 
-    if(navigator.share){
-
-
-        navigator.share({
-
-            title:"고민 중요도 결과",
-
-            text:text
-
-        });
+${userWorry}
 
 
-    }
+중요도:
 
-    else{
-
-
-        navigator.clipboard.writeText(text);
+${score}/15
 
 
-        alert(
-        "결과가 복사되었습니다."
-        );
+
+확인하기:
+
+${url}
+
+`;
 
 
-    }
+
+if(navigator.share){
+
+
+navigator.share({
+
+title:"고민 중요도 결과",
+
+text:text,
+
+url:url
+
+});
+
+
+}
+
+else{
+
+
+navigator.clipboard.writeText(text);
+
+
+alert("공유 내용이 복사되었습니다.");
+
+}
 
 
 }
@@ -266,27 +532,33 @@ ${score}/15 단계
 
 
 
+
 function restart(){
 
 
-    currentQuestion=0;
+current=0;
 
-    answers=[];
-
-
-    document
-    .getElementById("resultScreen")
-    .classList.add("d-none");
+answers=[];
 
 
-    document
-    .getElementById("startScreen")
-    .classList.remove("d-none");
+userWorry="";
 
 
-    document
-    .getElementById("worryInput")
-    .value="";
+
+document
+.getElementById("result")
+.classList.add("hidden");
+
+
+
+document
+.getElementById("start")
+.classList.remove("hidden");
+
+
+document
+.getElementById("worry")
+.value="";
 
 
 }
