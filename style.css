@@ -1,0 +1,212 @@
+body {
+
+    background: linear-gradient(
+        135deg,
+        #eef2ff,
+        #f8fafc
+    );
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-family:
+    "Pretendard",
+    "Noto Sans KR",
+    sans-serif;
+
+}
+
+
+
+.container {
+
+    width:100%;
+
+    max-width:500px;
+
+}
+
+
+
+.app-card {
+
+
+    background:white;
+
+    border-radius:25px;
+
+    padding:30px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,0.08);
+
+
+}
+
+
+
+.title {
+
+    text-align:center;
+
+    font-weight:800;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.description {
+
+    text-align:center;
+
+    color:#64748b;
+
+    margin-bottom:25px;
+
+}
+
+
+
+textarea {
+
+    border-radius:15px;
+
+    resize:none;
+
+}
+
+
+
+.btn {
+
+    border-radius:15px;
+
+    padding:14px;
+
+    font-size:17px;
+
+}
+
+
+
+.question {
+
+    margin-top:25px;
+
+    margin-bottom:40px;
+
+    line-height:1.5;
+
+    font-weight:700;
+
+}
+
+
+
+.answer-box {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+
+.answer-btn {
+
+    height:55px;
+
+}
+
+
+
+.progress {
+
+    height:10px;
+
+    border-radius:10px;
+
+}
+
+
+
+.progress-bar {
+
+    transition:0.3s;
+
+}
+
+
+
+.score-card {
+
+
+    text-align:center;
+
+    background:#f8fafc;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    margin:30px 0;
+
+
+}
+
+
+
+.score {
+
+
+    font-size:55px;
+
+    font-weight:900;
+
+    color:#2563eb;
+
+
+}
+
+
+
+#resultText {
+
+    margin-top:20px;
+
+    line-height:1.7;
+
+}
+
+
+
+@media(max-width:400px){
+
+
+    .app-card{
+
+        padding:20px;
+
+        border-radius:20px;
+
+    }
+
+
+    .title{
+
+        font-size:25px;
+
+    }
+
+
+}
